@@ -4,7 +4,9 @@ import os
 from models.normal_distribution import NormalDistribution
 from models.pseudo_random_number_visualizer import PseudoRandomNumberVisualizer
 
+
 class TabNormalDistribution(ttk.Frame):
+
     def __init__(self, parent, *args, **kwargs):
         super().__init__(parent, *args, **kwargs)
         self.results = [] 
@@ -92,11 +94,15 @@ class TabNormalDistribution(ttk.Frame):
             messagebox.showwarning("Advertencia", "No hay resultados para guardar.")
             return
 
-        file_path = filedialog.asksaveasfilename(defaultextension=".txt", 
+        file_path = filedialog.asksaveasfilename(defaultextension=".txt",
             filetypes=[("Text files", "*.txt"), ("All files", "*.*")])
+        
         if file_path:
             with open(file_path, 'w') as f:
-                for _, Ri, _ in self.results:
-                    f.write(f"{Ri}\n")
-
+                seen = set()
+                for _, _, Ni in self.results:
+                    if Ni not in seen:
+                        f.write(f"{Ni}\n")
+                        seen.add(Ni)
+            
             os.startfile(file_path)
